@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-8">
+    <div class="flex items-center justify-between">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Monthly Insights
+        </h1>
+        <a href="/"
+            class="hidden sm:inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Upload New
+        </a>
+    </div>
+
+    {% if not reports %}
+    <div class="text-center py-12 bg-white rounded-2xl shadow-sm border border-gray-100">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No reports</h3>
+        <p class="mt-1 text-sm text-gray-500">Get started by uploading your first statement.</p>
+        <div class="mt-6">
+            <a href="/"
+                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Upload
+            </a>
+        </div>
+    </div>
+    {% else %}
+    {% for month, month_data in reports.items() %}
+    <section class="bg-white rounded-2xl shadow-sm border border-gray-200/60 overflow-hidden">
+        <!-- Month Header -->
+        <div
+            class="px-6 py-4 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-800 font-mono tracking-wide">
+                {{ month }}
+            </h3>
+            <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+                Summary
+            </span>
+        </div>
+
+        <div class="divide-y divide-gray-100">
+            {% for person, data in month_data.items() %}
+            <div class="p-0">
+                <!-- Person Header Summary -->
+                <div class="px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between bg-white hover:bg-gray-50/50 transition-colors group cursor-pointer"
+                    onclick="document.getElementById('details-{{ month }}-{{ person }}').classList.toggle('hidden');">
+                    <div class="flex items-center justify-between w-full">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm">
+                                {{ person[0] }}
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-900">{{ person }}</h4>
+                                <p class="text-xs text-gray-500">{{ data.entries|length }}
+                                    transactions</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="block text-lg font-bold text-gray-900">{{
+                                "%.2f"|format(data.total) }} {{ data.currency }}</span>
+                            <span
+                                class="text-xs text-indigo-600 font-medium group-hover:underline">View
+                                details</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expandable Details -->
+                <div id="details-{{ month }}-{{ person }}"
+                    class="hidden bg-gray-50/30 border-t border-gray-100 shadow-inner">
+                    <ul class="divide-y divide-gray-100/80">
+                        {% for item in data.entries %}
+                        <li
+                            class="px-6 py-3 flex items-start justify-between hover:bg-gray-50 transition-colors">
+                            <div class="pr-4">
+                                <p class="text-sm font-medium text-gray-700">{{ item.description }}
+                                </p>
+                                <!-- Optional: Add category or date detail if available later -->
+                            </div>
+                            <div class="flex-shrink-0 text-right">
+                                <span
+                                    class="block text-sm font-mono font-semibold {% if item.total_amount < 0 %}text-gray-900{% else %}text-emerald-600{% endif %}">
+                                    {{ "%.2f"|format(item.total_amount) }}
+                                </span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<script>
+    // Optional: Add simple accordion behavior if desired, currently using inline onclick for simplicity
+</script>
+{% endblock %}

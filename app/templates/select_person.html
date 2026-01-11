@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">Finalize Upload</h1>
+    
+    <p class="mb-4 text-gray-600">
+        File <strong>{{ filename }}</strong> uploaded. Please select who this expense is for.
+    </p>
+
+    <form action="/upload/finalize" method="post" class="space-y-6">
+        <input type="hidden" name="file_id" value="{{ file_id }}">
+        
+        <div>
+            <label for="person" class="block text-sm font-medium text-gray-700">Who is this for?</label>
+            <select id="person" name="person" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md border">
+                <option value="Eva">Eva</option>
+                <option value="Sophie">Sophie</option>
+            </select>
+        </div>
+
+        <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            Process File
+        </button>
+    </form>
+</div>
+{% endblock %}
