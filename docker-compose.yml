@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    image: repivot:latest
     ports:
-      - "8000:8000"
+      - "8388:8000"
     volumes:
       - ./revolut.db:/app/revolut.db
       - ./static/icon.svg:/app/static/icon.svg

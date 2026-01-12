@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
@@ -16,6 +16,10 @@ app = FastAPI(title="RePivot")
 
 # Middleware
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
+@app.exception_handler(401)
+async def unauthorized_exception_handler(request: Request, exc: HTTPException):
+    return RedirectResponse(url="/login")
 
 # Static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
