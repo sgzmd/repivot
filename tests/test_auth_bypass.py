@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock, patch
 from app.auth import get_current_user
-from app.config import settings
+
 
 @pytest.mark.asyncio
 async def test_auth_bypass_active():
@@ -9,8 +9,9 @@ async def test_auth_bypass_active():
     with patch("app.config.settings.AUTH_BYPASS", "bypass@revolut.com"):
         request = MagicMock()
         user = await get_current_user(request)
-        assert user['email'] == "bypass@revolut.com"
-        assert user['name'] == "Dev User"
+        assert user["email"] == "bypass@revolut.com"
+        assert user["name"] == "Dev User"
+
 
 @pytest.mark.asyncio
 async def test_auth_bypass_inactive():
@@ -21,8 +22,8 @@ async def test_auth_bypass_inactive():
         request.session.get.return_value = None
         user = await get_current_user(request)
         assert user is None
-        
+
         # With session
-        request.session.get.return_value = {'email': 'real@user.com'}
+        request.session.get.return_value = {"email": "real@user.com"}
         user = await get_current_user(request)
-        assert user['email'] == 'real@user.com'
+        assert user["email"] == "real@user.com"

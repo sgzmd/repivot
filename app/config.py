@@ -1,6 +1,7 @@
 import os
 from typing import List
 
+
 class Settings:
     SECRET_KEY: str = os.getenv("SECRET_KEY", "dev_secret_key")
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")
@@ -8,5 +9,7 @@ class Settings:
     ALLOWED_USERS: List[str] = os.getenv("ALLOWED_USERS", "").split(",")
     AUTH_BYPASS: str = os.getenv("AUTH_BYPASS", "")
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./revolut.db")
+    TRUSTED_HOSTS: List[str] = os.getenv("TRUSTED_HOSTS", "*").split(",")
+
 
 settings = Settings()
